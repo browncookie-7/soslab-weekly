@@ -25,23 +25,24 @@
   --shadow: rgba(0,0,0,0.06);
 }
 [data-theme="dark"] {
-  --bg: #1a1917;
-  --surface: #242220;
-  --surface2: #2c2a27;
-  --border: #3a3835;
-  --border-strong: #4a4845;
-  --text: #f0ede8;
-  --text-muted: #a09d98;
-  --text-faint: #6b6860;
-  --accent: #4f86f7;
-  --accent-light: #1e2a45;
-  --green: #22c55e;
-  --amber: #f59e0b;
+  --bg: #141312;
+  --surface: #1e1c1a;
+  --surface2: #272422;
+  --border: #3a3633;
+  --border-strong: #504b47;
+  --text: #f5f2ed;
+  --text-muted: #b8b4ae;
+  --text-faint: #857f79;
+  --accent: #6b9fff;
+  --accent-light: #1a2840;
+  --green: #4ade80;
+  --amber: #fbbf24;
   --red: #f87171;
-  --shadow: rgba(0,0,0,0.3);
+  --shadow: rgba(0,0,0,0.4);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --radius: 10px; --radius-lg: 16px; }
 body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; transition: background 0.2s, color 0.2s; }
 
 /* TOPBAR */
@@ -53,9 +54,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 }
 .topbar-left { display: flex; align-items: center; gap: 16px; }
 .topbar-title { font-size: 15px; font-weight: 700; letter-spacing: 0.05em; }
-.view-toggle { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+.view-toggle { display: flex; border: 1px solid var(--border-strong); border-radius: 20px; overflow: hidden; }
 .view-btn {
-  padding: 5px 14px; font-size: 12px; font-weight: 500;
+  padding: 5px 16px; font-size: 12px; font-weight: 500;
   font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
   border: none; background: var(--surface); color: var(--text-muted); transition: all 0.13s;
 }
@@ -63,10 +64,10 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .topbar-right { display: flex; gap: 8px; align-items: center; }
 .btn {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 7px 13px; border-radius: var(--radius);
+  padding: 7px 14px; border-radius: 20px;
   font-size: 12px; font-weight: 500; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; border: 1px solid var(--border-strong);
-  background: var(--surface); color: var(--text); transition: background 0.13s;
+  background: var(--surface); color: var(--text); transition: all 0.15s;
 }
 .btn:hover { background: var(--bg); }
 .btn-save { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -126,30 +127,35 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
 
 /* TABLES */
-.tbl { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.tbl { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
 .tbl-head { background: var(--surface2); border-bottom: 1px solid var(--border); display: grid; }
 .th { padding: 8px 10px; font-size: 10px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase; }
-.tbl-row { display: grid; border-bottom: 1px solid var(--border); align-items: stretch; }
+.tbl-row { display: grid; border-bottom: 1px solid var(--border); align-items: center; }
 .tbl-row:last-child { border-bottom: none; }
-.tc { padding: 6px 10px; display: flex; align-items: flex-start; }
+.tc { padding: 8px 10px; display: flex; align-items: center; }
 .tc input, .tc textarea, .tc select {
   width: 100%; border: none; background: transparent;
   font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--text); outline: none; resize: none;
 }
-.tc textarea { line-height: 1.5; min-height: 32px; overflow: hidden; }
+.tc textarea { line-height: 1.5; min-height: 0; height: auto; overflow: hidden; }
 .tc-center { align-items: center; }
+.tc-name { align-self: stretch; display: flex; align-items: center; }
+.tc-name textarea { padding-top: 0; padding-bottom: 0; margin: 0; }
+.tc-status { align-self: center; }
+.tc-detail { align-self: center; }
 
 /* task cols: 분류/업무명/진행률/세부현황이슈 */
-.task-cols { grid-template-columns: 82px 200px 64px 1fr 32px; }
+.task-cols { grid-template-columns: 88px 200px 64px 1fr 32px; }
 /* plan cols: 분류/업무명/세부내용/예상소요/완료목표 */
-.plan-cols { grid-template-columns: 82px 200px 1fr 64px 90px 32px; }
+.plan-cols { grid-template-columns: 88px 200px 1fr 64px 90px 32px; }
 
 .cat-sel {
-  padding: 3px 6px; border-radius: 20px; border: 1px solid var(--border);
+  padding: 4px 6px; border-radius: 20px; border: 1px solid var(--border);
   font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
-  width: 100%; cursor: pointer; outline: none; background: var(--surface2); color: var(--text);
+  width: 74px; flex-shrink: 0;
+  cursor: pointer; outline: none; background: var(--surface2); color: var(--text);
 }
-.pct-wrap { display: flex; align-items: center; gap: 1px; }
+.pct-wrap { display: flex; align-items: center; gap: 1px; justify-content: flex-start; }
 .pct-input {
   width: 36px !important; text-align: right; font-weight: 500;
   color: var(--accent) !important; font-size: 13px !important; padding: 0 !important;
@@ -167,7 +173,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 
 /* MEMO */
 .memo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.memo-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.memo-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
 .memo-header {
   padding: 8px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
   text-transform: uppercase; color: var(--text-muted); background: var(--surface2);
@@ -198,7 +204,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 
 /* ATT */
 .att-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.att-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.att-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
 .att-panel-head { display: grid; grid-template-columns: 72px 70px 80px 1fr; gap: 6px; padding: 7px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); }
 .att-col-label { font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
 .att-member-row { display: grid; grid-template-columns: 72px 70px 80px 1fr; gap: 6px; padding: 7px 12px; border-bottom: 1px solid var(--border); align-items: center; }
@@ -213,7 +219,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .att-inp.readonly { background: var(--surface2); color: var(--text-muted); cursor: default; }
 
 /* chart - border-based for print compatibility */
-.chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; }
 .chart-title { font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
 .chart-bar-row { display: grid; grid-template-columns: 60px 1fr 42px 56px; gap: 8px; align-items: center; margin-bottom: 9px; }
 .chart-bar-row:last-child { margin-bottom: 0; }
@@ -229,7 +235,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .chart-total { font-size: 10px; color: var(--text-faint); text-align: right; }
 
 /* summary editable table */
-.summary-tbl { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; border-collapse: collapse; table-layout: fixed; }
+.summary-tbl { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; border-collapse: collapse; table-layout: fixed; }
 .summary-tbl th { background: var(--surface2); padding: 8px 12px; font-size: 10px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.06em; text-align: left; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
 .summary-tbl th:last-child { border-right: none; }
 .summary-tbl td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: top; overflow: hidden; }
@@ -245,7 +251,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .summary-tbl td textarea:focus { background: var(--accent-light); }
 
 /* meeting notes */
-.meeting-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.meeting-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .meeting-field label { display: block; font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
 .meeting-field textarea {
   width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
@@ -261,7 +267,14 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
   display: flex; align-items: center; justify-content: center;
   z-index: 999; font-size: 14px; color: var(--text-muted);
 }
-[data-theme="dark"] .loading-overlay { background: rgba(26,25,23,0.88); }
+[data-theme="dark"] .cat-sel { background: var(--surface2); color: var(--text); border-color: var(--border); }
+[data-theme="dark"] .week-sel { background: var(--surface); color: var(--text); }
+[data-theme="dark"] .att-inp { background: var(--surface); color: var(--text); border-color: var(--border); }
+[data-theme="dark"] .reporter-row input { background: var(--surface); color: var(--text); }
+[data-theme="dark"] .meeting-field textarea { background: var(--surface2); color: var(--text); }
+[data-theme="dark"] .summary-tbl td textarea:focus { background: var(--accent-light); }
+[data-theme="dark"] .pct-input { color: var(--accent) !important; }
+[data-theme="dark"] .add-row-btn:hover { background: var(--surface2); }
 
 /* PRINT */
 @media print {
@@ -291,6 +304,121 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 .bar-c2 { background: #16a34a; }
 .bar-c3 { background: #d97706; }
 .bar-c4 { background: #be185d; }
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  /* topbar — 2줄로 */
+  .topbar {
+    padding: 8px 14px; height: auto;
+    flex-direction: column; align-items: stretch; gap: 8px;
+  }
+  .topbar-left { justify-content: space-between; }
+  .topbar-title { font-size: 13px; }
+  .topbar-right { justify-content: flex-end; gap: 6px; }
+  .save-indicator { display: none; }
+  .btn { padding: 7px 12px; font-size: 12px; border-radius: 20px; }
+  .btn-label { display: none; }
+
+  /* week bar */
+  .week-bar { padding: 8px 14px; gap: 6px; }
+  .week-bar-label { display: none; }
+  .week-sel { font-size: 12px; padding: 5px 6px; }
+  .week-period-badge { display: none; }
+
+  /* tabs */
+  .member-tabs { padding: 0 14px; }
+  .tab { padding: 9px 13px; font-size: 12px; }
+
+  /* main */
+  .main { padding: 20px 14px 80px; }
+  .submit-main { padding: 20px 14px 80px; }
+  .section { margin-bottom: 24px; }
+
+  /* task/plan 헤더 숨김 */
+  .tbl-head.task-cols,
+  .tbl-head.plan-cols { display: none; }
+
+  /* task: 1행 분류+업무명, 2행 진행률, 3행 세부현황 */
+  .tbl-row.task-cols {
+    display: grid;
+    grid-template-areas:
+      "cat name del"
+      "pct pct pct"
+      "status status status";
+    grid-template-columns: 80px 1fr 28px;
+    padding: 10px 12px; gap: 5px;
+  }
+  .tbl-row.task-cols .tc-cat { grid-area: cat; padding: 0; align-items: center; }
+  .tbl-row.task-cols .tc-name { grid-area: name; padding: 0 0 0 8px; align-items: center; }
+  .tbl-row.task-cols .tc-del { grid-area: del; padding: 0; justify-content: center; }
+  .tbl-row.task-cols .tc-pct { grid-area: pct; padding: 4px 0 0; border-top: 1px solid var(--border); }
+  .tbl-row.task-cols .tc-status { grid-area: status; padding: 4px 0 0; border-top: 1px solid var(--border); }
+
+  /* plan: 1행 분류+업무명, 2행 예상시간+목표일, 3행 세부내용 */
+  .tbl-row.plan-cols {
+    display: grid;
+    grid-template-areas:
+      "cat name del"
+      "time deadline deadline"
+      "detail detail detail";
+    grid-template-columns: 80px 1fr 28px;
+    padding: 10px 12px; gap: 5px;
+  }
+  .tbl-row.plan-cols .tc-cat { grid-area: cat; padding: 0; align-items: center; }
+  .tbl-row.plan-cols .tc-name { grid-area: name; padding: 0 0 0 8px; align-items: center; }
+  .tbl-row.plan-cols .tc-del { grid-area: del; padding: 0; justify-content: center; }
+  .tbl-row.plan-cols .tc-time { grid-area: time; padding: 4px 0 0; border-top: 1px solid var(--border); font-size: 12px; }
+  .tbl-row.plan-cols .tc-deadline { display: flex; grid-area: deadline; padding: 4px 0 0; border-top: 1px solid var(--border); }
+  .tbl-row.plan-cols .tc-detail { grid-area: detail; padding: 4px 0 0; border-top: 1px solid var(--border); }
+
+  /* memo */
+  .memo-grid { grid-template-columns: 1fr; }
+  .memo-full { grid-column: 1; }
+
+  /* submit att */
+  .att-layout { grid-template-columns: 1fr; }
+  .att-panel-head { grid-template-columns: 64px 58px 68px 1fr; gap: 4px; padding: 6px 10px; }
+  .att-col-label { font-size: 9px; }
+  .att-member-row { grid-template-columns: 64px 58px 68px 1fr; gap: 4px; padding: 6px 10px; }
+  .att-inp { padding: 3px 5px; font-size: 11px; }
+
+  /* chart */
+  .chart-bar-row { grid-template-columns: 52px 1fr 34px 48px; gap: 6px; }
+  .chart-name { font-size: 11px; }
+
+  /* summary */
+  .summary-tbl { display: block; }
+  .summary-tbl thead { display: none; }
+  .summary-tbl tbody { display: block; }
+  .summary-tbl tr {
+    display: flex; flex-direction: column;
+    border-bottom: 1px solid var(--border); padding: 12px 0;
+  }
+  .summary-tbl tr:last-child { border-bottom: none; }
+  .summary-tbl td { display: block; border: none; width: 100%; }
+  .summary-tbl td.name-cell {
+    padding: 0 12px 6px; font-size: 13px; font-weight: 700;
+    color: var(--accent); width: auto; white-space: normal;
+  }
+  .summary-tbl td[data-label]::before {
+    content: attr(data-label);
+    display: block; font-size: 10px; font-weight: 700;
+    color: var(--text-faint); text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 0 12px; margin-bottom: 2px;
+  }
+  .summary-tbl td textarea { min-height: 36px; padding: 6px 12px; }
+
+  /* meeting box */
+  .meeting-box { grid-template-columns: 1fr; }
+  .meeting-full { grid-column: 1; }
+
+  /* reporter */
+  .reporter-row { flex-wrap: wrap; }
+  .reporter-row input { width: 100%; }
+
+  /* modal */
+  #memberModal > div { width: calc(100vw - 28px) !important; padding: 18px !important; }
+}
 </style>
 </head>
 <body>
@@ -333,9 +461,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       <span id="saveLabel">저장됨</span>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="다크/라이트 모드">🌙</button>
-    <button class="btn no-print" onclick="openMemberModal()" style="font-size:12px;">👥 멤버 관리</button>
-    <button class="btn btn-save no-print" id="saveBtn" onclick="saveCurrentMember(true)">💾 내 정보 저장</button>
-    <button class="btn btn-print no-print" onclick="doPrint()">🖨 PDF 출력</button>
+    <button class="btn no-print" onclick="openMemberModal()" style="font-size:12px;"><span class="btn-icon">👥</span><span class="btn-label"> 멤버 관리</span></button>
+    <button class="btn btn-save no-print" id="saveBtn" onclick="saveCurrentMember(true)"><span class="btn-icon">💾</span><span class="btn-label"> 내 정보 저장</span></button>
+    <button class="btn btn-print no-print" id="printBtn" onclick="doPrint()"><span class="btn-icon">🖨</span><span class="btn-label"> PDF 출력</span></button>
   </div>
 </div>
 
@@ -364,7 +492,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
           <div class="th">분류</div>
           <div class="th">업무명</div>
           <div class="th">진행률</div>
-          <div class="th">세부 현황 / 이슈</div>
+          <div class="th th-status">세부 현황 / 이슈</div>
           <div class="th"></div>
         </div>
         <div id="taskBody"></div>
@@ -382,9 +510,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
         <div class="tbl-head plan-cols">
           <div class="th">분류</div>
           <div class="th">업무명</div>
-          <div class="th">세부 내용</div>
+          <div class="th th-detail">세부 내용</div>
           <div class="th">예상 시간</div>
-          <div class="th">목표일</div>
+          <div class="th th-deadline">목표일</div>
           <div class="th"></div>
         </div>
         <div id="planBody"></div>
@@ -685,14 +813,16 @@ window.switchView = async function(view) {
   document.getElementById('btnWrite').className = 'view-btn' + (view === 'write' ? ' active' : '');
   document.getElementById('btnSubmit').className = 'view-btn' + (view === 'submit' ? ' active' : '');
   const saveBtn = document.getElementById('saveBtn');
+  const saveLabelSpan = saveBtn.querySelector('.btn-label');
   if (view === 'write') {
-    saveBtn.textContent = '💾 내 정보 저장';
+    if (saveLabelSpan) saveLabelSpan.textContent = ' 내 정보 저장';
     saveBtn.onclick = () => saveCurrentMember(true);
   } else {
-    saveBtn.textContent = '💾 회의록 저장';
+    if (saveLabelSpan) saveLabelSpan.textContent = ' 회의록 저장';
     saveBtn.onclick = () => saveMeetingNow(true);
     await renderSubmitView();
   }
+  updateButtonLabels();
 };
 
 /* ── TABS ── */
@@ -800,24 +930,24 @@ window.addTaskRow = function(data) {
   const cs = CAT_STYLE[data.cat] || CAT_STYLE['기타'];
   const catOpts = CATS.map(c => `<option ${c===data.cat?'selected':''}>${c}</option>`).join('');
   row.innerHTML = `
-    <div class="tc tc-center">
+    <div class="tc tc-center tc-cat">
       <select class="cat-sel" onchange="updateCatStyle(this); markUnsaved();"
         style="background:${cs.bg}; border-color:${cs.border}; color:${cs.color};">${catOpts}</select>
     </div>
-    <div class="tc">
-      <textarea class="task-name-ta" placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="min-height:32px; font-weight:500;">${esc(data.name)}</textarea>
+    <div class="tc tc-name">
+      <textarea placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="font-weight:500; word-break:break-all;">${esc(data.name)}</textarea>
     </div>
-    <div class="tc tc-center">
+    <div class="tc tc-center tc-pct">
       <div class="pct-wrap">
         <input class="pct-input" type="number" min="0" max="100" placeholder="–" value="${esc(String(data.pct||''))}" oninput="markUnsaved()">
         <span class="pct-sym">%</span>
       </div>
     </div>
-    <div class="tc">
+    <div class="tc tc-status">
       <textarea placeholder="세부 현황 및 이슈" oninput="markUnsaved(); autoResize(this);">${esc(data.status)}</textarea>
     </div>
-    <div class="tc tc-center">
-      <button class="del-btn no-print" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
+    <div class="tc tc-center tc-del no-print">
+      <button class="del-btn" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
     </div>
   `;
   body.appendChild(row);
@@ -832,24 +962,24 @@ window.addPlanRow = function(data) {
   const cs = CAT_STYLE[data.cat] || CAT_STYLE['기타'];
   const catOpts = CATS.map(c => `<option ${c===data.cat?'selected':''}>${c}</option>`).join('');
   row.innerHTML = `
-    <div class="tc tc-center">
+    <div class="tc tc-center tc-cat">
       <select class="cat-sel" onchange="updateCatStyle(this); markUnsaved();"
         style="background:${cs.bg}; border-color:${cs.border}; color:${cs.color};">${catOpts}</select>
     </div>
-    <div class="tc">
-      <textarea placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="min-height:32px; font-weight:500;">${esc(data.name)}</textarea>
+    <div class="tc tc-name">
+      <textarea placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="font-weight:500; word-break:break-all;">${esc(data.name)}</textarea>
     </div>
-    <div class="tc">
+    <div class="tc tc-detail">
       <textarea placeholder="세부 내용" oninput="markUnsaved(); autoResize(this);">${esc(data.detail)}</textarea>
     </div>
-    <div class="tc tc-center">
-      <input type="text" placeholder="예) 6h" value="${esc(data.time)}" oninput="markUnsaved()" style="text-align:center;">
+    <div class="tc tc-center tc-time">
+      <input type="text" placeholder="예) 6h" value="${esc(data.time)}" oninput="markUnsaved()">
     </div>
-    <div class="tc tc-center">
-      <input type="text" placeholder="예) 04/25" value="${esc(data.deadline)}" oninput="markUnsaved()" style="text-align:center;">
+    <div class="tc tc-center tc-deadline">
+      <input type="text" placeholder="예) 04/25" value="${esc(data.deadline)}" oninput="markUnsaved()">
     </div>
-    <div class="tc tc-center">
-      <button class="del-btn no-print" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
+    <div class="tc tc-center tc-del no-print">
+      <button class="del-btn" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
     </div>
   `;
   body.appendChild(row);
@@ -873,16 +1003,19 @@ function collectMember() {
   const tasks = [];
   document.querySelectorAll('#taskBody .tbl-row').forEach(row => {
     const sel = row.querySelector('select');
-    const tas = row.querySelectorAll('textarea');
+    const nameTa = row.querySelector('.tc-name textarea');
     const pctInp = row.querySelector('input[type=number]');
-    tasks.push({ cat: sel?.value||'연구', name: tas[0]?.value||'', pct: pctInp?.value||'', status: tas[1]?.value||'' });
+    const statusTa = row.querySelector('.tc-status textarea');
+    tasks.push({ cat: sel?.value||'연구', name: nameTa?.value||'', pct: pctInp?.value||'', status: statusTa?.value||'' });
   });
   const plans = [];
   document.querySelectorAll('#planBody .tbl-row').forEach(row => {
     const sel = row.querySelector('select');
-    const tas = row.querySelectorAll('textarea');
-    const textInputs = row.querySelectorAll('input[type=text]');
-    plans.push({ cat: sel?.value||'연구', name: tas[0]?.value||'', detail: tas[1]?.value||'', time: textInputs[0]?.value||'', deadline: textInputs[1]?.value||'' });
+    const nameTa = row.querySelector('.tc-name textarea');
+    const detailTa = row.querySelector('.tc-detail textarea');
+    const timeInp = row.querySelector('.tc-time input');
+    const deadlineInp = row.querySelector('.tc-deadline input');
+    plans.push({ cat: sel?.value||'연구', name: nameTa?.value||'', detail: detailTa?.value||'', time: timeInp?.value||'', deadline: deadlineInp?.value||'' });
   });
   return {
     tasks, plans,
@@ -901,9 +1034,12 @@ window.saveCurrentMember = async function(showFeedback = true) {
   markSaved();
   if (showFeedback) {
     const btn = document.getElementById('saveBtn');
-    const orig = btn.textContent;
-    btn.textContent = '✓ 저장됨';
-    setTimeout(() => { btn.textContent = orig; }, 1500);
+    const labelSpan = btn.querySelector('.btn-label');
+    if (labelSpan) {
+      const orig = labelSpan.textContent;
+      labelSpan.textContent = ' ✓ 저장됨';
+      setTimeout(() => { labelSpan.textContent = orig; }, 1500);
+    }
   }
 };
 
@@ -1010,7 +1146,7 @@ function renderChart(attData) {
     // Use a table-based bar so background prints without special settings
     row.innerHTML = `
       <div class="chart-name">${m}</div>
-      <div class="chart-track" style="background:#f0f0ee;">
+      <div class="chart-track" style="background:var(--surface2);">
         <div style="width:${pct}%; height:100%; background-color:${color}; print-color-adjust:exact; -webkit-print-color-adjust:exact;"></div>
       </div>
       <div class="chart-val" style="color:${color};">${val}h</div>
@@ -1061,9 +1197,12 @@ async function saveMeetingNow(showFeedback = false) {
   if (showFeedback) {
     markSaved();
     const btn = document.getElementById('saveBtn');
-    const orig = btn.textContent;
-    btn.textContent = '✓ 저장됨';
-    setTimeout(() => { btn.textContent = orig; }, 1500);
+    const labelSpan = btn.querySelector('.btn-label');
+    if (labelSpan) {
+      const orig = labelSpan.textContent;
+      labelSpan.textContent = ' ✓ 저장됨';
+      setTimeout(() => { labelSpan.textContent = orig; }, 1500);
+    }
   }
 }
 
@@ -1079,8 +1218,8 @@ function buildSummaryRows(savedSummary) {
     tr.dataset.member = m;
     tr.innerHTML = `
       <td class="name-cell">${m}</td>
-      <td><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.lastWeek||'')}</textarea></td>
-      <td><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.thisWeek||'')}</textarea></td>
+      <td data-label="지난주 업무"><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.lastWeek||'')}</textarea></td>
+      <td data-label="이번주 계획"><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.thisWeek||'')}</textarea></td>
     `;
     tbody.appendChild(tr);
   });
