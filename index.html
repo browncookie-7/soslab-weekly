@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOSLAB 주간 업무 회의록</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+[data-theme="light"] {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --surface2: #f9f8f5;
+  --border: #e2dfd8;
+  --border-strong: #c8c4ba;
+  --text: #1c1a17;
+  --text-muted: #6b6860;
+  --text-faint: #aaa89f;
+  --accent: #2563eb;
+  --accent-light: #eff4ff;
+  --green: #16a34a;
+  --amber: #d97706;
+  --red: #dc2626;
+  --shadow: rgba(0,0,0,0.06);
+}
+[data-theme="dark"] {
+  --bg: #1a1917;
+  --surface: #242220;
+  --surface2: #2c2a27;
+  --border: #3a3835;
+  --border-strong: #4a4845;
+  --text: #f0ede8;
+  --text-muted: #a09d98;
+  --text-faint: #6b6860;
+  --accent: #4f86f7;
+  --accent-light: #1e2a45;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #f87171;
+  --shadow: rgba(0,0,0,0.3);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; transition: background 0.2s, color 0.2s; }
+
+/* TOPBAR */
+.topbar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-title { font-size: 15px; font-weight: 700; letter-spacing: 0.05em; }
+.view-toggle { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+.view-btn {
+  padding: 5px 14px; font-size: 12px; font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  border: none; background: var(--surface); color: var(--text-muted); transition: all 0.13s;
+}
+.view-btn.active { background: var(--text); color: var(--bg); }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: var(--radius);
+  font-size: 12px; font-weight: 500; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; border: 1px solid var(--border-strong);
+  background: var(--surface); color: var(--text); transition: background 0.13s;
+}
+.btn:hover { background: var(--bg); }
+.btn-save { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-save:hover { opacity: 0.88; }
+.btn-print { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-print:hover { opacity: 0.88; }
+.theme-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border-strong); background: var(--surface2);
+  cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+  transition: background 0.13s;
+}
+.theme-btn:hover { background: var(--border); }
+.save-indicator { font-size: 11px; color: var(--text-faint); display: flex; align-items: center; gap: 5px; }
+.save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.save-dot.unsaved { background: var(--amber); }
+.save-dot.saving { background: var(--accent); }
+
+/* WEEK BAR */
+.week-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 10px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.week-bar-label { font-size: 11px; color: var(--text-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-right: 4px; }
+.week-sel {
+  padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; color: var(--text);
+  background: var(--surface); outline: none; cursor: pointer;
+}
+.week-sel:focus { border-color: var(--accent); }
+.week-period-badge {
+  padding: 4px 10px; background: var(--accent-light); border-radius: 20px;
+  font-size: 11px; color: var(--accent); font-weight: 500;
+}
+
+/* MEMBER TABS */
+.member-tabs {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 24px; display: flex; overflow-x: auto;
+}
+.tab {
+  padding: 11px 18px; font-size: 13px; font-weight: 400;
+  color: var(--text-muted); cursor: pointer;
+  border-bottom: 2px solid transparent; white-space: nowrap;
+  transition: all 0.13s; font-family: 'Noto Sans KR', sans-serif;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* MAIN */
+.main { max-width: 900px; margin: 0 auto; padding: 32px 16px 80px; }
+
+/* SECTION */
+.section { margin-bottom: 28px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding: 0 2px; }
+.section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+
+/* TABLES */
+.tbl { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.tbl-head { background: var(--surface2); border-bottom: 1px solid var(--border); display: grid; }
+.th { padding: 8px 10px; font-size: 10px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase; }
+.tbl-row { display: grid; border-bottom: 1px solid var(--border); align-items: stretch; }
+.tbl-row:last-child { border-bottom: none; }
+.tc { padding: 6px 10px; display: flex; align-items: flex-start; }
+.tc input, .tc textarea, .tc select {
+  width: 100%; border: none; background: transparent;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--text); outline: none; resize: none;
+}
+.tc textarea { line-height: 1.5; min-height: 32px; overflow: hidden; }
+.tc-center { align-items: center; }
+
+/* task cols: 분류/업무명/진행률/세부현황이슈 */
+.task-cols { grid-template-columns: 82px 200px 64px 1fr 32px; }
+/* plan cols: 분류/업무명/세부내용/예상소요/완료목표 */
+.plan-cols { grid-template-columns: 82px 200px 1fr 64px 90px 32px; }
+
+.cat-sel {
+  padding: 3px 6px; border-radius: 20px; border: 1px solid var(--border);
+  font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
+  width: 100%; cursor: pointer; outline: none; background: var(--surface2); color: var(--text);
+}
+.pct-wrap { display: flex; align-items: center; gap: 1px; }
+.pct-input {
+  width: 36px !important; text-align: right; font-weight: 500;
+  color: var(--accent) !important; font-size: 13px !important; padding: 0 !important;
+}
+.pct-sym { font-size: 12px; color: var(--accent); flex-shrink: 0; }
+.del-btn { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 15px; padding: 4px 6px; line-height: 1; transition: color 0.13s; flex-shrink: 0; }
+.del-btn:hover { color: var(--red); }
+.add-row-btn {
+  width: 100%; padding: 9px; background: none; border: none;
+  border-top: 1px solid var(--border); color: var(--text-faint);
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; text-align: center; transition: background 0.12s;
+}
+.add-row-btn:hover { background: var(--surface2); color: var(--accent); }
+
+/* MEMO */
+.memo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.memo-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.memo-header {
+  padding: 8px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--text-muted); background: var(--surface2);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px;
+}
+.dot-ind { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.memo-panel textarea {
+  width: 100%; padding: 10px 12px; border: none; background: transparent;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--text);
+  resize: none; outline: none; min-height: 80px; line-height: 1.6; overflow: hidden;
+}
+.memo-full { grid-column: 1 / -1; }
+
+/* SUBMIT VIEW */
+#submitView { display: none; }
+.submit-main { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+.submit-section { margin-bottom: 24px; }
+
+/* reporter row */
+.reporter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.reporter-row label { font-size: 11px; color: var(--text-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+.reporter-row input {
+  padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; color: var(--text);
+  background: var(--surface); outline: none; width: 160px;
+}
+.reporter-row input:focus { border-color: var(--accent); }
+
+/* ATT */
+.att-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.att-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.att-panel-head { display: grid; grid-template-columns: 72px 70px 80px 1fr; gap: 6px; padding: 7px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+.att-col-label { font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+.att-member-row { display: grid; grid-template-columns: 72px 70px 80px 1fr; gap: 6px; padding: 7px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+.att-member-row:last-child { border-bottom: none; }
+.att-name { font-size: 12px; font-weight: 500; }
+.att-inp {
+  padding: 4px 7px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; color: var(--text);
+  background: var(--surface); outline: none; width: 100%;
+}
+.att-inp:focus { border-color: var(--accent); }
+.att-inp.readonly { background: var(--surface2); color: var(--text-muted); cursor: default; }
+
+/* chart - border-based for print compatibility */
+.chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.chart-title { font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.chart-bar-row { display: grid; grid-template-columns: 60px 1fr 42px 56px; gap: 8px; align-items: center; margin-bottom: 9px; }
+.chart-bar-row:last-child { margin-bottom: 0; }
+.chart-name { font-size: 12px; font-weight: 500; }
+.chart-track { position: relative; height: 10px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.chart-fill {
+  position: absolute; left: 0; top: 0; height: 100%;
+  border-right: 10px solid transparent; /* fallback */
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chart-val { font-size: 11px; font-weight: 500; text-align: right; }
+.chart-total { font-size: 10px; color: var(--text-faint); text-align: right; }
+
+/* summary editable table */
+.summary-tbl { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; border-collapse: collapse; table-layout: fixed; }
+.summary-tbl th { background: var(--surface2); padding: 8px 12px; font-size: 10px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.06em; text-align: left; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+.summary-tbl th:last-child { border-right: none; }
+.summary-tbl td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: top; overflow: hidden; }
+.summary-tbl tr:last-child td { border-bottom: none; }
+.summary-tbl td:last-child { border-right: none; }
+.summary-tbl td.name-cell { padding: 10px 12px; font-size: 12px; font-weight: 500; white-space: nowrap; vertical-align: middle; width: 72px; }
+.summary-tbl td textarea {
+  width: 100%; padding: 8px 12px; border: none; background: transparent;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--text);
+  resize: none; outline: none; min-height: 48px; line-height: 1.6; overflow: hidden;
+  display: block;
+}
+.summary-tbl td textarea:focus { background: var(--accent-light); }
+
+/* meeting notes */
+.meeting-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.meeting-field label { display: block; font-size: 10px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
+.meeting-field textarea {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--text);
+  background: var(--surface2); outline: none; resize: none; min-height: 70px; line-height: 1.6; overflow: hidden;
+}
+.meeting-field textarea:focus { border-color: var(--accent); background: var(--surface); }
+.meeting-full { grid-column: 1 / -1; }
+
+/* LOADING */
+.loading-overlay {
+  position: fixed; inset: 0; background: rgba(255,255,255,0.88);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999; font-size: 14px; color: var(--text-muted);
+}
+[data-theme="dark"] .loading-overlay { background: rgba(26,25,23,0.88); }
+
+/* PRINT */
+@media print {
+  @page { size: A4 portrait; margin: 14mm 12mm; }
+  body { background: white !important; color: #1c1a17 !important; font-size: 11px; }
+  .topbar, .member-tabs, .week-bar, #writeView, .no-print { display: none !important; }
+  #submitView { display: block !important; }
+  .submit-main { padding: 0; max-width: 100%; }
+  .print-header { display: block !important; }
+  .att-inp { border: none !important; background: transparent !important; padding: 2px 0 !important; }
+  .submit-section { break-inside: avoid; }
+  .att-layout { break-inside: avoid; }
+  .summary-tbl { table-layout: fixed !important; }
+  .summary-tbl td { overflow: visible !important; vertical-align: top !important; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+.print-header {
+  display: none; margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 2px solid #1c1a17;
+}
+.print-header h1 { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 6px; letter-spacing: 0.04em; }
+.ph-sub { display: flex; justify-content: center; gap: 24px; font-size: 11px; color: #555; }
+
+/* BAR COLORS */
+.bar-c0 { background: #2563eb; }
+.bar-c1 { background: #7c3aed; }
+.bar-c2 { background: #16a34a; }
+.bar-c3 { background: #d97706; }
+.bar-c4 { background: #be185d; }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">데이터 불러오는 중...</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">SOSLAB 주간 회의록</div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btnWrite" onclick="switchView('write')">작성</button>
+      <button class="view-btn" id="btnSubmit" onclick="switchView('submit')">제출용</button>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="save-indicator">
+      <div class="save-dot" id="saveDot"></div>
+      <span id="saveLabel">저장됨</span>
+    </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="다크/라이트 모드">🌙</button>
+    <button class="btn btn-save no-print" id="saveBtn" onclick="saveCurrentMember(true)">💾 내 정보 저장</button>
+    <button class="btn btn-print no-print" onclick="doPrint()">🖨 PDF 출력</button>
+  </div>
+</div>
+
+<!-- WEEK BAR -->
+<div class="week-bar">
+  <span class="week-bar-label">주차</span>
+  <select class="week-sel" id="selYear" onchange="onWeekSelChange()"></select>
+  <select class="week-sel" id="selMonth" onchange="onWeekSelChange()"></select>
+  <select class="week-sel" id="selWeek" onchange="onWeekSelChange()"></select>
+  <div class="week-period-badge" id="periodBadge">–</div>
+</div>
+
+<!-- WRITE VIEW -->
+<div id="writeView">
+  <div class="member-tabs" id="memberTabs"></div>
+  <div class="main">
+
+    <!-- TASK -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">지난주 업무</div>
+        <button class="btn no-print" onclick="addTaskRow()" style="font-size:11px;padding:5px 10px;">+ 추가</button>
+      </div>
+      <div class="tbl">
+        <div class="tbl-head task-cols">
+          <div class="th">분류</div>
+          <div class="th">업무명</div>
+          <div class="th">진행률</div>
+          <div class="th">세부 현황 / 이슈</div>
+          <div class="th"></div>
+        </div>
+        <div id="taskBody"></div>
+        <button class="add-row-btn no-print" onclick="addTaskRow()">+ 업무 추가</button>
+      </div>
+    </div>
+
+    <!-- PLAN -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">이번주 계획</div>
+        <button class="btn no-print" onclick="addPlanRow()" style="font-size:11px;padding:5px 10px;">+ 추가</button>
+      </div>
+      <div class="tbl">
+        <div class="tbl-head plan-cols">
+          <div class="th">분류</div>
+          <div class="th">업무명</div>
+          <div class="th">세부 내용</div>
+          <div class="th">예상 시간</div>
+          <div class="th">목표일</div>
+          <div class="th"></div>
+        </div>
+        <div id="planBody"></div>
+        <button class="add-row-btn no-print" onclick="addPlanRow()">+ 계획 추가</button>
+      </div>
+    </div>
+
+    <!-- MEMO -->
+    <div class="section">
+      <div class="section-title" style="margin-bottom:8px;">기타</div>
+      <div class="memo-grid">
+        <div class="memo-panel">
+          <div class="memo-header"><div class="dot-ind" style="background:#dc2626;"></div>막히는 것 / 도움 필요</div>
+          <textarea id="memo_help" placeholder="어려운 점, 도움 요청..." oninput="markUnsaved(); autoResize(this);"></textarea>
+        </div>
+        <div class="memo-panel">
+          <div class="memo-header"><div class="dot-ind" style="background:#d97706;"></div>교수님 확인 필요</div>
+          <textarea id="memo_confirm" placeholder="미팅 일정, 방향 결정 필요 사항..." oninput="markUnsaved(); autoResize(this);"></textarea>
+        </div>
+        <div class="memo-panel memo-full">
+          <div class="memo-header"><div class="dot-ind" style="background:#6b6860;"></div>기타 메모</div>
+          <textarea id="memo_etc" placeholder="자유롭게 작성..." oninput="markUnsaved(); autoResize(this);"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUBMIT VIEW -->
+<div id="submitView">
+  <div class="submit-main">
+
+    <!-- PRINT HEADER -->
+    <div class="print-header" id="printHeader">
+      <h1 id="printTitle">SOSLAB 주간 업무 회의록</h1>
+      <div class="ph-sub">
+        <span id="ph_period"></span>
+        <span id="ph_reporter"></span>
+      </div>
+    </div>
+
+    <!-- REPORTER -->
+    <div class="reporter-row no-print">
+      <label>보고자</label>
+      <input type="text" id="reporterInput" placeholder="이름" oninput="onMeetingInput()">
+      <button class="btn no-print" onclick="resetSubmit()" style="margin-left:auto; color:var(--red); border-color:var(--red);">🗑 전체 초기화</button>
+    </div>
+
+    <!-- 근태 현황 -->
+    <div class="submit-section">
+      <div class="section-title" style="margin-bottom:10px;">근태 현황</div>
+      <div class="att-layout">
+        <div class="att-panel">
+          <div class="att-panel-head">
+            <div class="att-col-label">이름</div>
+            <div class="att-col-label">이번주(h)</div>
+            <div class="att-col-label">월 누계(h)</div>
+            <div class="att-col-label">비고</div>
+          </div>
+          <div id="attRows"></div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-title">이번주 근무시간</div>
+          <div id="attChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 업무 현황 요약 -->
+    <div class="submit-section">
+      <div class="section-title" style="margin-bottom:8px;">업무 현황 요약</div>
+      <table class="summary-tbl">
+        <thead><tr>
+          <th style="width:72px;">이름</th>
+          <th>지난주 업무</th>
+          <th>이번주 계획</th>
+        </tr></thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 회의 조율 사항 -->
+    <div class="submit-section">
+      <div class="section-title" style="margin-bottom:8px;">회의 조율 사항</div>
+      <div class="meeting-box">
+        <div class="meeting-field">
+          <label>업무 분배 특이사항</label>
+          <textarea id="meet_distribution" oninput="onMeetingInput(); autoResize(this);"></textarea>
+        </div>
+        <div class="meeting-field">
+          <label>도움 요청 / 협업 필요</label>
+          <textarea id="meet_collab" oninput="onMeetingInput(); autoResize(this);"></textarea>
+        </div>
+        <div class="meeting-field meeting-full">
+          <label>기타 메모</label>
+          <textarea id="meet_etc" oninput="onMeetingInput(); autoResize(this);" style="min-height:50px;"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDS9FYC5Y3k-Rsuog6MVqwynYhU22hW4BE",
+  authDomain: "soslab-weekly.firebaseapp.com",
+  projectId: "soslab-weekly",
+  storageBucket: "soslab-weekly.firebasestorage.app",
+  messagingSenderId: "179500529713",
+  appId: "1:179500529713:web:5c69ff407a801ff72abd10"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ── CONSTANTS ── */
+const CATS = ['연구','논문','행정','기타'];
+const CAT_STYLE = {
+  '연구': { bg:'#eff4ff', border:'#93c5fd', color:'#1d4ed8' },
+  '논문': { bg:'#f5f3ff', border:'#c4b5fd', color:'#5b21b6' },
+  '행정': { bg:'#f0fdf4', border:'#86efac', color:'#15803d' },
+  '기타': { bg:'#f7f6f2', border:'#d4d0c8', color:'#57534e' },
+};
+const BAR_COLORS = ['#2563eb','#7c3aed','#16a34a','#d97706','#be185d'];
+
+let members = ['도준','박채린','송현섭','김민석','이휘수'];
+let currentMember = members[0];
+let currentWeekInfo = null;
+let unsaved = false;
+let currentView = 'write';
+let meetingSaveTimer = null;
+
+/* ── WEEK UTILS (Monday-based) ── */
+function getMondayOfWeek(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = (day === 0) ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function buildWeeksForYear(year) {
+  const weeks = [];
+  // Start from Jan 1, find first Monday of the year
+  let monday = new Date(year, 0, 1);
+  while (monday.getDay() !== 1) monday.setDate(monday.getDate() + 1);
+
+  while (monday.getFullYear() === year) {
+    const sunday = new Date(monday);
+    sunday.setDate(sunday.getDate() + 6);
+
+    // Month = monday's month (first Monday of April = April 1주)
+    const m = monday.getMonth(); // 0-indexed
+
+    // weekOfMonth = how many Mondays in this month have occurred up to and including this one
+    let weekOfMonth = 1;
+    let probe = new Date(monday);
+    probe.setDate(probe.getDate() - 7);
+    while (probe.getMonth() === m && probe.getFullYear() === year) {
+      weekOfMonth++;
+      probe.setDate(probe.getDate() - 7);
+    }
+    // weekOfMonth was counting backwards, fix: reset
+    weekOfMonth = 1;
+    probe = new Date(monday);
+    probe.setDate(probe.getDate() - 7);
+    while (probe.getMonth() === m && probe.getFullYear() === year) {
+      weekOfMonth++;
+      probe.setDate(probe.getDate() - 7);
+    }
+    // still wrong direction — count from first monday of month forward
+    // find first monday of this month
+    let firstMon = new Date(year, m, 1);
+    while (firstMon.getDay() !== 1) firstMon.setDate(firstMon.getDate() + 1);
+    weekOfMonth = Math.round((monday - firstMon) / (7 * 24 * 3600 * 1000)) + 1;
+
+    const fmt = (d) => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    weeks.push({
+      year,
+      month: m + 1,
+      weekOfMonth,
+      monday: new Date(monday),
+      sunday: new Date(sunday),
+      label: `${year}년 ${m+1}월 ${weekOfMonth}주`,
+      period: `${fmt(monday)} ~ ${fmt(sunday)}`,
+      key: `${year}-${String(m+1).padStart(2,'0')}-W${weekOfMonth}`,
+    });
+
+    monday.setDate(monday.getDate() + 7);
+  }
+  return weeks;
+}
+
+const YEARS = [2026, 2027, 2028, 2029, 2030];
+const ALL_WEEKS = YEARS.flatMap(y => buildWeeksForYear(y));
+
+function getTodayWeek() {
+  const today = new Date();
+  const todayMon = getMondayOfWeek(today);
+  return ALL_WEEKS.find(w => w.monday.getTime() === todayMon.getTime()) || ALL_WEEKS[0];
+}
+
+/* ── WEEK SELECTORS ── */
+function buildWeekSelectors() {
+  const selYear = document.getElementById('selYear');
+  const selMonth = document.getElementById('selMonth');
+  const selWeek = document.getElementById('selWeek');
+
+  const initYear = currentWeekInfo ? currentWeekInfo.year : YEARS[0];
+  const initMonth = currentWeekInfo ? currentWeekInfo.month : 1;
+  const initKey = currentWeekInfo ? currentWeekInfo.key : ALL_WEEKS[0].key;
+
+  selYear.innerHTML = YEARS.map(y => `<option value="${y}" ${y===initYear?'selected':''}>${y}년</option>`).join('');
+
+  function populateMonths(selectedMonth) {
+    const yr = parseInt(selYear.value);
+    const months = [...new Set(ALL_WEEKS.filter(w => w.year === yr).map(w => w.month))];
+    selMonth.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonth?'selected':''}>${m}월</option>`).join('');
+  }
+
+  function populateWeeks(selectedKey) {
+    const yr = parseInt(selYear.value);
+    const m = parseInt(selMonth.value);
+    const weeksInMonth = ALL_WEEKS.filter(w => w.year === yr && w.month === m);
+    selWeek.innerHTML = weeksInMonth.map(w =>
+      `<option value="${w.key}" ${w.key===selectedKey?'selected':''}>${w.weekOfMonth}주 (${w.period.split('~')[0].trim()}~)</option>`
+    ).join('');
+  }
+
+  populateMonths(initMonth);
+  populateWeeks(initKey);
+
+  selYear.onchange = () => {
+    populateMonths(1);
+    populateWeeks(null);
+    onWeekSelChange();
+  };
+  selMonth.onchange = () => {
+    populateWeeks(null);
+    onWeekSelChange();
+  };
+}
+
+window.onWeekSelChange = async function() {
+  const key = document.getElementById('selWeek').value;
+  const found = ALL_WEEKS.find(w => w.key === key);
+  if (!found) return;
+  await saveCurrentMember(false);
+  currentWeekInfo = found;
+  document.getElementById('periodBadge').textContent = found.period;
+  await loadMemberData();
+  if (currentView === 'submit') await renderSubmitView();
+};
+
+/* ── THEME ── */
+window.toggleTheme = function() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('sos_theme', isDark ? 'light' : 'dark');
+};
+
+/* ── INIT ── */
+async function init() {
+  // theme
+  const savedTheme = localStorage.getItem('sos_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  const savedMembers = await getDoc(doc(db, 'config', 'members'));
+  if (savedMembers.exists()) members = savedMembers.data().list;
+
+  currentWeekInfo = getTodayWeek();
+  buildWeekSelectors();
+  document.getElementById('periodBadge').textContent = currentWeekInfo.period;
+
+  renderTabs();
+  await loadMemberData();
+  hideLoading();
+}
+init();
+
+function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
+function showLoading() { document.getElementById('loadingOverlay').style.display = 'flex'; }
+
+/* ── VIEW SWITCH ── */
+window.switchView = async function(view) {
+  currentView = view;
+  document.getElementById('writeView').style.display = view === 'write' ? 'block' : 'none';
+  document.getElementById('submitView').style.display = view === 'submit' ? 'block' : 'none';
+  document.getElementById('memberTabs').style.display = view === 'write' ? 'flex' : 'none';
+  document.getElementById('btnWrite').className = 'view-btn' + (view === 'write' ? ' active' : '');
+  document.getElementById('btnSubmit').className = 'view-btn' + (view === 'submit' ? ' active' : '');
+  const saveBtn = document.getElementById('saveBtn');
+  if (view === 'write') {
+    saveBtn.textContent = '💾 내 정보 저장';
+    saveBtn.onclick = () => saveCurrentMember(true);
+  } else {
+    saveBtn.textContent = '💾 회의록 저장';
+    saveBtn.onclick = () => saveMeetingNow(true);
+    await renderSubmitView();
+  }
+};
+
+/* ── TABS ── */
+function renderTabs() {
+  const el = document.getElementById('memberTabs');
+  el.innerHTML = '';
+  members.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (m === currentMember ? ' active' : '');
+    btn.textContent = m;
+    btn.onclick = async () => {
+      await saveCurrentMember(false);
+      currentMember = m;
+      renderTabs();
+      await loadMemberData();
+    };
+    el.appendChild(btn);
+  });
+  const add = document.createElement('button');
+  add.className = 'tab'; add.style.color = 'var(--text-faint)';
+  add.textContent = '+ 멤버';
+  add.onclick = async () => {
+    const n = prompt('멤버 이름:');
+    if (!n || members.includes(n.trim())) return;
+    members.push(n.trim());
+    await setDoc(doc(db, 'config', 'members'), { list: members });
+    currentMember = n.trim();
+    renderTabs();
+    await loadMemberData();
+  };
+  el.appendChild(add);
+}
+
+/* ── UNSAVED ── */
+window.markUnsaved = function() {
+  unsaved = true;
+  document.getElementById('saveDot').className = 'save-dot unsaved';
+  document.getElementById('saveLabel').textContent = '미저장';
+};
+function markSaving() {
+  document.getElementById('saveDot').className = 'save-dot saving';
+  document.getElementById('saveLabel').textContent = '저장 중...';
+}
+function markSaved() {
+  unsaved = false;
+  document.getElementById('saveDot').className = 'save-dot';
+  document.getElementById('saveLabel').textContent = '저장됨';
+}
+
+/* ── TASK ROWS ── */
+window.addTaskRow = function(data) {
+  data = data || { cat:'연구', name:'', pct:'', status:'' };
+  const body = document.getElementById('taskBody');
+  const row = document.createElement('div');
+  row.className = 'tbl-row task-cols';
+  const cs = CAT_STYLE[data.cat] || CAT_STYLE['기타'];
+  const catOpts = CATS.map(c => `<option ${c===data.cat?'selected':''}>${c}</option>`).join('');
+  row.innerHTML = `
+    <div class="tc tc-center">
+      <select class="cat-sel" onchange="updateCatStyle(this); markUnsaved();"
+        style="background:${cs.bg}; border-color:${cs.border}; color:${cs.color};">${catOpts}</select>
+    </div>
+    <div class="tc">
+      <textarea class="task-name-ta" placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="min-height:32px; font-weight:500;">${esc(data.name)}</textarea>
+    </div>
+    <div class="tc tc-center">
+      <div class="pct-wrap">
+        <input class="pct-input" type="number" min="0" max="100" placeholder="–" value="${esc(String(data.pct||''))}" oninput="markUnsaved()">
+        <span class="pct-sym">%</span>
+      </div>
+    </div>
+    <div class="tc">
+      <textarea placeholder="세부 현황 및 이슈" oninput="markUnsaved(); autoResize(this);">${esc(data.status)}</textarea>
+    </div>
+    <div class="tc tc-center">
+      <button class="del-btn no-print" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
+    </div>
+  `;
+  body.appendChild(row);
+};
+
+/* ── PLAN ROWS ── */
+window.addPlanRow = function(data) {
+  data = data || { cat:'연구', name:'', detail:'', time:'', deadline:'' };
+  const body = document.getElementById('planBody');
+  const row = document.createElement('div');
+  row.className = 'tbl-row plan-cols';
+  const cs = CAT_STYLE[data.cat] || CAT_STYLE['기타'];
+  const catOpts = CATS.map(c => `<option ${c===data.cat?'selected':''}>${c}</option>`).join('');
+  row.innerHTML = `
+    <div class="tc tc-center">
+      <select class="cat-sel" onchange="updateCatStyle(this); markUnsaved();"
+        style="background:${cs.bg}; border-color:${cs.border}; color:${cs.color};">${catOpts}</select>
+    </div>
+    <div class="tc">
+      <textarea placeholder="업무명" oninput="markUnsaved(); autoResize(this);" style="min-height:32px; font-weight:500;">${esc(data.name)}</textarea>
+    </div>
+    <div class="tc">
+      <textarea placeholder="세부 내용" oninput="markUnsaved(); autoResize(this);">${esc(data.detail)}</textarea>
+    </div>
+    <div class="tc tc-center">
+      <input type="text" placeholder="예) 6h" value="${esc(data.time)}" oninput="markUnsaved()" style="text-align:center;">
+    </div>
+    <div class="tc tc-center">
+      <input type="text" placeholder="예) 04/25" value="${esc(data.deadline)}" oninput="markUnsaved()" style="text-align:center;">
+    </div>
+    <div class="tc tc-center">
+      <button class="del-btn no-print" onclick="this.closest('.tbl-row').remove(); markUnsaved();">×</button>
+    </div>
+  `;
+  body.appendChild(row);
+};
+
+/* ── HELPERS ── */
+window.updateCatStyle = function(sel) {
+  const s = CAT_STYLE[sel.value] || CAT_STYLE['기타'];
+  sel.style.background = s.bg; sel.style.borderColor = s.border; sel.style.color = s.color;
+};
+window.autoResize = function(el) {
+  el.style.height = '0px';
+  el.style.height = el.scrollHeight + 'px';
+};
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── COLLECT MEMBER DATA ── */
+function collectMember() {
+  const tasks = [];
+  document.querySelectorAll('#taskBody .tbl-row').forEach(row => {
+    const sel = row.querySelector('select');
+    const tas = row.querySelectorAll('textarea');
+    const pctInp = row.querySelector('input[type=number]');
+    tasks.push({ cat: sel?.value||'연구', name: tas[0]?.value||'', pct: pctInp?.value||'', status: tas[1]?.value||'' });
+  });
+  const plans = [];
+  document.querySelectorAll('#planBody .tbl-row').forEach(row => {
+    const sel = row.querySelector('select');
+    const tas = row.querySelectorAll('textarea');
+    const textInputs = row.querySelectorAll('input[type=text]');
+    plans.push({ cat: sel?.value||'연구', name: tas[0]?.value||'', detail: tas[1]?.value||'', time: textInputs[0]?.value||'', deadline: textInputs[1]?.value||'' });
+  });
+  return {
+    tasks, plans,
+    memo_help: document.getElementById('memo_help').value,
+    memo_confirm: document.getElementById('memo_confirm').value,
+    memo_etc: document.getElementById('memo_etc').value,
+  };
+}
+
+/* ── SAVE MEMBER ── */
+window.saveCurrentMember = async function(showFeedback = true) {
+  if (!unsaved && !showFeedback) return;
+  markSaving();
+  const data = collectMember();
+  await setDoc(doc(db, 'weeks', `${currentWeekInfo.key}__${currentMember}`), data);
+  markSaved();
+  if (showFeedback) {
+    const btn = document.getElementById('saveBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ 저장됨';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  }
+};
+
+/* ── LOAD MEMBER ── */
+async function loadMemberData() {
+  showLoading();
+  const snap = await getDoc(doc(db, 'weeks', `${currentWeekInfo.key}__${currentMember}`));
+  const d = snap.exists() ? snap.data() : {};
+
+  document.getElementById('memo_help').value = d.memo_help || '';
+  document.getElementById('memo_confirm').value = d.memo_confirm || '';
+  document.getElementById('memo_etc').value = d.memo_etc || '';
+
+  document.getElementById('taskBody').innerHTML = '';
+  (d.tasks && d.tasks.length ? d.tasks : [undefined]).forEach(t => addTaskRow(t));
+
+  document.getElementById('planBody').innerHTML = '';
+  (d.plans && d.plans.length ? d.plans : [undefined]).forEach(p => addPlanRow(p));
+
+  // resize textareas after load
+  setTimeout(() => {
+    document.querySelectorAll('#writeView textarea').forEach(ta => autoResize(ta));
+  }, 100);
+
+  markSaved();
+  hideLoading();
+}
+
+/* ── MONTH TOTAL COMPUTATION ── */
+async function computeMonthTotals(currentMeetData) {
+  // get all weeks in same month before current week
+  const sameMonthPrevWeeks = ALL_WEEKS.filter(w =>
+    w.year === currentWeekInfo.year &&
+    w.month === currentWeekInfo.month &&
+    w.key !== currentWeekInfo.key &&
+    w.monday < currentWeekInfo.monday
+  );
+
+  const totals = {};
+  members.forEach(m => totals[m] = 0);
+
+  for (const w of sameMonthPrevWeeks) {
+    const snap = await getDoc(doc(db, 'meetings', `meeting__${w.key}`));
+    if (!snap.exists()) continue;
+    const att = snap.data().att || {};
+    members.forEach(m => {
+      totals[m] += parseFloat(att[m]?.thisWeek || 0);
+    });
+  }
+
+  // add current week's input
+  members.forEach(m => {
+    const thisWeek = parseFloat(currentMeetData?.att?.[m]?.thisWeek || 0);
+    totals[m] += thisWeek;
+  });
+
+  return totals;
+}
+
+/* ── ATT ROWS ── */
+function renderAttRows(attData) {
+  const container = document.getElementById('attRows');
+  container.innerHTML = '';
+  members.forEach(m => {
+    const att = attData[m] || {};
+    const row = document.createElement('div');
+    row.className = 'att-member-row';
+    row.dataset.member = m;
+    row.innerHTML = `
+      <div class="att-name">${m}</div>
+      <input class="att-inp att-this" type="number" placeholder="0" value="${att.thisWeek||''}" min="0" max="168" oninput="onAttInput()">
+      <input class="att-inp att-total readonly" type="number" placeholder="–" value="${att.monthTotal||''}" readonly>
+      <input class="att-inp att-note" type="text" value="${esc(att.note||'')}" oninput="onAttInput()">
+    `;
+    container.appendChild(row);
+  });
+}
+
+function collectAttData() {
+  const result = {};
+  document.querySelectorAll('.att-member-row').forEach(row => {
+    const m = row.dataset.member;
+    result[m] = {
+      thisWeek: parseFloat(row.querySelector('.att-this').value) || 0,
+      monthTotal: parseFloat(row.querySelector('.att-total').value) || 0,
+      note: row.querySelector('.att-note').value,
+    };
+  });
+  return result;
+}
+
+function renderChart(attData) {
+  const container = document.getElementById('attChart');
+  container.innerHTML = '';
+  const values = members.map(m => parseFloat(attData[m]?.thisWeek || 0));
+  const maxVal = Math.max(...values, 1);
+  members.forEach((m, i) => {
+    const val = values[i];
+    const pct = Math.round((val / maxVal) * 100);
+    const color = BAR_COLORS[i % BAR_COLORS.length];
+    const monthTotal = parseFloat(attData[m]?.monthTotal || 0);
+    const row = document.createElement('div');
+    row.className = 'chart-bar-row';
+    // Use a table-based bar so background prints without special settings
+    row.innerHTML = `
+      <div class="chart-name">${m}</div>
+      <div class="chart-track" style="background:#f0f0ee;">
+        <div style="width:${pct}%; height:100%; background-color:${color}; print-color-adjust:exact; -webkit-print-color-adjust:exact;"></div>
+      </div>
+      <div class="chart-val" style="color:${color};">${val}h</div>
+      <div class="chart-total">누계 ${monthTotal}h</div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* ── MEETING INPUT HANDLERS ── */
+window.onAttInput = async function() {
+  const att = collectAttData();
+  const totals = await computeMonthTotals({ att });
+  // update readonly total fields
+  members.forEach(m => {
+    const row = document.querySelector(`.att-member-row[data-member="${m}"]`);
+    if (row) {
+      row.querySelector('.att-total').value = totals[m];
+      if (att[m]) att[m].monthTotal = totals[m];
+    }
+  });
+  renderChart(att);
+  scheduleMeetingSave();
+};
+
+window.onMeetingInput = function() {
+  scheduleMeetingSave();
+};
+
+function scheduleMeetingSave() {
+  clearTimeout(meetingSaveTimer);
+  meetingSaveTimer = setTimeout(() => saveMeetingNow(false), 1500);
+}
+
+async function saveMeetingNow(showFeedback = false) {
+  const att = collectAttData();
+  const meetData = {
+    att,
+    reporter: document.getElementById('reporterInput').value,
+    distribution: document.getElementById('meet_distribution').value,
+    collab: document.getElementById('meet_collab').value,
+    etc: document.getElementById('meet_etc').value,
+    summaryData: collectSummaryData(),
+    week: currentWeekInfo.key,
+    period: currentWeekInfo.period,
+  };
+  await setDoc(doc(db, 'meetings', `meeting__${currentWeekInfo.key}`), meetData);
+  if (showFeedback) {
+    markSaved();
+    const btn = document.getElementById('saveBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ 저장됨';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  }
+}
+
+window.saveMeetingNow = saveMeetingNow;
+
+/* ── SUMMARY (editable) ── */
+function buildSummaryRows(savedSummary) {
+  const tbody = document.getElementById('summaryBody');
+  tbody.innerHTML = '';
+  members.forEach(m => {
+    const saved = savedSummary?.[m] || {};
+    const tr = document.createElement('tr');
+    tr.dataset.member = m;
+    tr.innerHTML = `
+      <td class="name-cell">${m}</td>
+      <td><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.lastWeek||'')}</textarea></td>
+      <td><textarea oninput="onMeetingInput(); autoResize(this);" style="min-height:60px;">${esc(saved.thisWeek||'')}</textarea></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  setTimeout(() => {
+    document.querySelectorAll('#summaryBody textarea').forEach(ta => autoResize(ta));
+  }, 80);
+}
+
+function collectSummaryData() {
+  const result = {};
+  document.querySelectorAll('#summaryBody tr').forEach(tr => {
+    const m = tr.dataset.member;
+    const tas = tr.querySelectorAll('textarea');
+    result[m] = { lastWeek: tas[0]?.value||'', thisWeek: tas[1]?.value||'' };
+  });
+  return result;
+}
+
+/* ── RENDER SUBMIT VIEW ── */
+async function renderSubmitView() {
+  showLoading();
+
+  const meetSnap = await getDoc(doc(db, 'meetings', `meeting__${currentWeekInfo.key}`));
+  const meet = meetSnap.exists() ? meetSnap.data() : {};
+
+  // reporter & fields
+  document.getElementById('reporterInput').value = meet.reporter || '';
+  document.getElementById('meet_distribution').value = meet.distribution || '';
+  document.getElementById('meet_collab').value = meet.collab || '';
+  document.getElementById('meet_etc').value = meet.etc || '';
+
+  // att rows & chart
+  const attData = meet.att || {};
+
+  // compute month totals from DB
+  const totals = await computeMonthTotals(meet);
+  members.forEach(m => {
+    if (attData[m]) attData[m].monthTotal = totals[m];
+    else attData[m] = { thisWeek: 0, monthTotal: totals[m], note: '' };
+  });
+
+  renderAttRows(attData);
+  renderChart(attData);
+
+  // summary
+  buildSummaryRows(meet.summaryData || {});
+
+  // print header
+  document.getElementById('printTitle').textContent = `SOSLAB 주간 업무 회의록 (${currentWeekInfo.label})`;
+  document.getElementById('ph_period').textContent = currentWeekInfo.period;
+  document.getElementById('ph_reporter').textContent = meet.reporter ? `보고자: ${meet.reporter}` : '';
+
+  setTimeout(() => {
+    document.querySelectorAll('#submitView textarea').forEach(ta => autoResize(ta));
+  }, 120);
+
+  hideLoading();
+}
+
+/* ── RESET SUBMIT ── */
+window.resetSubmit = async function() {
+  if (!confirm('제출용 페이지의 모든 내용을 초기화할까요?')) return;
+  document.getElementById('reporterInput').value = '';
+  document.getElementById('meet_distribution').value = '';
+  document.getElementById('meet_collab').value = '';
+  document.getElementById('meet_etc').value = '';
+  document.querySelectorAll('.att-this').forEach(el => el.value = '');
+  document.querySelectorAll('.att-total').forEach(el => el.value = '');
+  document.querySelectorAll('.att-note').forEach(el => el.value = '');
+  document.querySelectorAll('#summaryBody textarea').forEach(el => { el.value = ''; autoResize(el); });
+  renderChart({});
+  await setDoc(doc(db, 'meetings', `meeting__${currentWeekInfo.key}`), {
+    att: {}, reporter: '', distribution: '', collab: '', etc: '', summaryData: {},
+    week: currentWeekInfo.key, period: currentWeekInfo.period,
+  });
+};
+
+/* ── PRINT ── */
+window.doPrint = async function() {
+  if (currentView === 'write') {
+    await saveCurrentMember(false);
+    await switchView('submit');
+  }
+  const reporter = document.getElementById('reporterInput').value;
+  document.getElementById('printTitle').textContent = `SOSLAB 주간 업무 회의록 (${currentWeekInfo.label})`;
+  document.getElementById('ph_period').textContent = currentWeekInfo.period;
+  document.getElementById('ph_reporter').textContent = reporter ? `보고자: ${reporter}` : '';
+  document.getElementById('printHeader').style.display = 'block';
+
+  // Convert all textareas in submitView to divs for proper print rendering
+  const submitEl = document.getElementById('submitView');
+  const replacements = [];
+  submitEl.querySelectorAll('textarea').forEach(ta => {
+    const div = document.createElement('div');
+    const inMeetingField = !!ta.closest('.meeting-field');
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.wordBreak = 'break-word';
+    div.style.wordWrap = 'break-word';
+    div.style.padding = inMeetingField ? '2px 0' : '8px 12px';
+    div.style.fontSize = '12px';
+    div.style.lineHeight = '1.6';
+    div.style.fontFamily = "'Noto Sans KR', sans-serif";
+    div.style.width = '100%';
+    div.style.boxSizing = 'border-box';
+    div.textContent = ta.value;
+    ta.parentNode.insertBefore(div, ta);
+    ta.style.display = 'none';
+    replacements.push({ ta, div });
+  });
+
+  window.print();
+
+  // Restore textareas
+  setTimeout(() => {
+    replacements.forEach(({ ta, div }) => {
+      ta.style.display = '';
+      div.remove();
+    });
+    document.getElementById('printHeader').style.display = 'none';
+  }, 600);
+};
+
+// Ctrl+S
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    currentView === 'write' ? saveCurrentMember(true) : saveMeetingNow(true);
+  }
+});
+</script>
+</body>
+</html>
