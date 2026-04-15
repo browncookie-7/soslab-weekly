@@ -294,6 +294,25 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 </head>
 <body>
 
+<!-- MEMBER MANAGEMENT MODAL -->
+<div id="memberModal" style="display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.4); align-items:center; justify-content:center;">
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; width:320px; box-shadow:0 8px 32px rgba(0,0,0,0.15);">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <div style="font-size:14px; font-weight:700;">멤버 관리</div>
+      <button onclick="closeMemberModal()" style="background:none; border:none; font-size:18px; cursor:pointer; color:var(--text-faint); line-height:1;">×</button>
+    </div>
+    <div id="memberList" style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;"></div>
+    <div style="display:flex; gap:8px;">
+      <input type="text" id="newMemberInput" placeholder="새 멤버 이름" style="flex:1; padding:7px 10px; border:1px solid var(--border); border-radius:var(--radius); font-size:12px; font-family:'Noto Sans KR',sans-serif; color:var(--text); background:var(--surface); outline:none;">
+      <button class="btn btn-save" onclick="addMemberFromModal()" style="padding:7px 12px; font-size:12px;">추가</button>
+    </div>
+    <div style="margin-top:12px; padding:10px; background:var(--surface2); border-radius:var(--radius); border:1px solid var(--border);">
+      <div style="font-size:10px; color:var(--red); font-weight:700; margin-bottom:4px;">⚠ 삭제 주의</div>
+      <div style="font-size:11px; color:var(--text-muted); line-height:1.5;">멤버 삭제 시 해당 멤버의 모든 작성 데이터가 함께 삭제됩니다. 되돌릴 수 없어요.</div>
+    </div>
+  </div>
+</div>
+
 <div class="loading-overlay" id="loadingOverlay">데이터 불러오는 중...</div>
 
 <!-- TOPBAR -->
@@ -311,6 +330,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
       <span id="saveLabel">저장됨</span>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="다크/라이트 모드">🌙</button>
+    <button class="btn no-print" onclick="openMemberModal()" style="font-size:12px;">👥 멤버 관리</button>
     <button class="btn btn-save no-print" id="saveBtn" onclick="saveCurrentMember(true)">💾 내 정보 저장</button>
     <button class="btn btn-print no-print" onclick="doPrint()">🖨 PDF 출력</button>
   </div>
@@ -688,20 +708,69 @@ function renderTabs() {
     };
     el.appendChild(btn);
   });
-  const add = document.createElement('button');
-  add.className = 'tab'; add.style.color = 'var(--text-faint)';
-  add.textContent = '+ 멤버';
-  add.onclick = async () => {
-    const n = prompt('멤버 이름:');
-    if (!n || members.includes(n.trim())) return;
-    members.push(n.trim());
-    await setDoc(doc(db, 'config', 'members'), { list: members });
-    currentMember = n.trim();
-    renderTabs();
-    await loadMemberData();
-  };
-  el.appendChild(add);
 }
+
+/* ── MEMBER MODAL ── */
+window.openMemberModal = function() {
+  renderMemberList();
+  const modal = document.getElementById('memberModal');
+  modal.style.display = 'flex';
+};
+
+window.closeMemberModal = function() {
+  document.getElementById('memberModal').style.display = 'none';
+  document.getElementById('newMemberInput').value = '';
+};
+
+// close on backdrop click
+document.getElementById('memberModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMemberModal();
+});
+
+function renderMemberList() {
+  const list = document.getElementById('memberList');
+  list.innerHTML = '';
+  members.forEach(m => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius);';
+    row.innerHTML = `
+      <span style="font-size:13px; font-weight:${m===currentMember?'700':'400'}; color:${m===currentMember?'var(--accent)':'var(--text)'};">${m}${m===currentMember?' (나)':''}</span>
+      <button onclick="confirmDeleteMember('${m}')" style="background:none; border:1px solid var(--border); border-radius:var(--radius); padding:3px 10px; font-size:11px; color:var(--text-muted); cursor:pointer; font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.borderColor='var(--red)'; this.style.color='var(--red)';" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-muted)';">삭제</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+window.confirmDeleteMember = function(name) {
+  if (name === currentMember) {
+    alert('현재 내가 선택된 탭은 삭제할 수 없어요. 다른 탭으로 이동 후 삭제해주세요.');
+    return;
+  }
+  const confirmed = confirm(`"${name}" 멤버를 삭제할까요?\n\n해당 멤버의 모든 데이터가 삭제되며 되돌릴 수 없어요.`);
+  if (!confirmed) return;
+  const reconfirmed = confirm(`정말로 삭제할까요?\n"${name}"의 모든 회의록 데이터가 사라져요.`);
+  if (!reconfirmed) return;
+  deleteMember(name);
+};
+
+async function deleteMember(name) {
+  members = members.filter(m => m !== name);
+  await setDoc(doc(db, 'config', 'members'), { list: members });
+  renderTabs();
+  renderMemberList();
+}
+
+window.addMemberFromModal = async function() {
+  const input = document.getElementById('newMemberInput');
+  const n = input.value.trim();
+  if (!n) return;
+  if (members.includes(n)) { alert('이미 있는 멤버예요.'); return; }
+  members.push(n);
+  await setDoc(doc(db, 'config', 'members'), { list: members });
+  input.value = '';
+  renderTabs();
+  renderMemberList();
+};
 
 /* ── UNSAVED ── */
 window.markUnsaved = function() {
