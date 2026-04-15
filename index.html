@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="logo.png">
 <title>SOSLAB 주간 업무 회의록</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -318,7 +319,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: va
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <div class="topbar-title">SOSLAB 주간 회의록</div>
+    <div class="topbar-title">
+      <img src="logo.png" style="width:28px; height:28px; object-fit:contain; vertical-align:middle; margin-right:8px; border-radius:4px;">SOSLAB 주간 회의록
+    </div>
     <div class="view-toggle">
       <button class="view-btn active" id="btnWrite" onclick="switchView('write')">작성</button>
       <button class="view-btn" id="btnSubmit" onclick="switchView('submit')">제출용</button>
